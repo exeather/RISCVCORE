@@ -1,0 +1,23 @@
+module DFFRAM_RTL_2048 #(parameter ADDRESS_LENGTH, parameter DATA_LENGTH) //${size}
+(
+input CLK,
+input [3:0] WE,
+input EN,
+input [(DATA_LENGTH-1):0] Di,
+output reg [(DATA_LENGTH-1):0] Do,
+input [(ADDRESS_LENGTH-1):0] A
+);
+
+reg [(DATA_LENGTH) -1:0] RAM[2047 : 0];		// Initialize the Memory 
+
+always @(posedge CLK)				// Reading or Writing the Data
+if(EN) begin
+Do <= RAM[A];
+if(WE[0]) RAM[A][ 7: 0] <= Di[7:0];
+if(WE[1]) RAM[A][15: 8] <= Di[15:8];
+if(WE[2]) RAM[A][23:16] <= Di[23:16];
+if(WE[3]) RAM[A][31:24] <= Di[31:24];
+end
+else
+Do <= 32'b0;
+endmodule
